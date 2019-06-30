@@ -66,13 +66,19 @@ const handleKeyDown = function(keyCode) {
     // TODO handle brackets indentation (|) {|} [|]
     let charBefore = defaultCaret.getCharacterBefore();
     let charAfter = defaultCaret.getCharacter();
-    console.log(charBefore + ' ' + charAfter);
+    
+    let line = lineRef[defaultCaret.getRow()-1];
+    let curCode = line.getCode();
+    let codeAfterCaret = curCode.substring(defaultCaret.getCol()-1);
+    curCode = curCode.substring(0, defaultCaret.getCol()-1);
+    line.setCode(curCode);
     
     defaultCaret.insertNewLineBelow();
+    line = lineRef[defaultCaret.getRow()-1];
+    line.setCode(codeAfterCaret);
   } 
   else if(keyCode == 8) { // BACKSPACE
-    // TODO handle matching pairs: [] () {} '' ""
-  
+    // TODO handle matching pairs: [] () {} '' "    
     defaultCaret.deleteCharacterBefore();
   }
   

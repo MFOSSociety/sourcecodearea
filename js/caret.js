@@ -78,14 +78,19 @@ Caret.prototype = {
 
   deleteCharacterBefore: function() {
     if(this.col == 1) { // delete current line if line is empty
-      if(this.row>1)
-        deleteLine(this.row);
-      
-      let newRow = this.row - 1;
-      if(newRow<1) newRow = 1;
-      let newCol = this.row==1 ? 1 : lineRef[this.row-2].getCode().length + 1;
+      if(this.row > 1) {
+        let prevLine = lineRef[defaultCaret.getRow()-2];
+        let prevCode = prevLine.getCode();
 
-      this.setPos(newRow, newCol);
+        let curLine = lineRef[defaultCaret.getRow()-1];
+        let curCode = curLine.getCode();
+
+        let newCol = prevCode.length + 1;
+        prevCode = prevCode + curCode;
+        prevLine.setCode(prevCode);
+        deleteLine(defaultCaret.getRow());
+        defaultCaret.setPos(defaultCaret.getRow()-1, newCol);
+      }
     } else { // delete previous character
       let line = lineRef[this.row-1];
       let code = line.getCode();

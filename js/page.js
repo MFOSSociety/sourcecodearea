@@ -34,20 +34,9 @@ const insertNewLineAfter = function(lineNum) {
 
 const deleteLine = function(lineNum) {
   if(lineNum > lineRef.length) return;
-  $(`.line:nth-child(${lineNum})`).hide();
+  $(`.line:nth-child(${lineNum})`).remove();
   
   lineRef.splice(lineNum-1, 1);
   for(let i = lineNum-1;i<lineRef.length;i++) 
     lineRef[i].setLineNum(lineRef[i].getLineNum()-1);
 }
-
-// const insertCharacterAtCaret = function(char, caret) {
-//   let row = caret.getRow();
-//   let col = caret.getCol();
-  
-//   let line = lineRef[row-1];
-//   let text = line.getCode();
-//   let newText = text.substring(0, col-1) + char + text.substring(col-1);
-//   line.setCode(newText);
-//   caret.setPos( row, col+1 );
-// }
