@@ -43,7 +43,7 @@ const colorMap = {
   'synchronized': { prefix: keywordPrefix, suffix: keywordSuffix },
   'this': { prefix: keywordPrefix, suffix: keywordSuffix },
   'throw': { prefix: keywordPrefix, suffix: keywordSuffix },
-  'throws	': { prefix: keywordPrefix, suffix: keywordSuffix },
+  'throws': { prefix: keywordPrefix, suffix: keywordSuffix },
   'transient	': { prefix: keywordPrefix, suffix: keywordSuffix },
   'try': { prefix: keywordPrefix, suffix: keywordSuffix },
   'void': { prefix: keywordPrefix, suffix: keywordSuffix },

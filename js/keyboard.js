@@ -20,11 +20,6 @@ Key.prototype = {
   }
 }
 
-var shiftKey = new Key(16, '');
-var ctrlKey = new Key(17, '');
-var altKey = new Key(18, '');
-var ignoreKeyList = [16, 17, 18];
-
 const isAlphabetKey = function(keyCode) {
   return keyCode>=65 && keyCode<=90;
 }
@@ -40,7 +35,6 @@ const isIgnoreKey = function(keyCode) {
 
 const keyToChar = function(keyCode) {
   let char;
-  console.log(shiftKey.isPressed());
   if(shiftKey.isPressed()) {
     char = keymap[keyCode][0];
   } else {
@@ -107,7 +101,7 @@ const handleKeyDown = function(keyCode) {
     }
   }
 
-  // NAVIGATION --------------------------------------------------------------------
+  // Navigation --------------------------------------------------------------------
   else if(keyCode == 38) { // UP ARROW KEY
     defaultCaret.moveUp();
   }
