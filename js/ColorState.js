@@ -2,7 +2,7 @@ function ColorState(startKey, endKey, color) {
   this.startKey = startKey;
   this.endKey = endKey;
   this.color = color;
-  this.state = false;
+  this.openStatus = false;
 }
 
 ColorState.prototype = {
@@ -12,7 +12,7 @@ ColorState.prototype = {
   getCloseKey: function() { return this.endKey; },
   getColor: function() { return this.color; },
 
-  isOpen: function() { return this.state; },
-  open: function() { this.state = true; },
-  close: function() { this.state = false; }
+  isOpen: function() { return this.openStatus; },
+  open: function() { this.openStatus = true; },
+  close: function() { this.openStatus = false; }
 }

@@ -11,6 +11,16 @@ const isNumber = function(str) {
   return !isNaN(str);
 }
 
+const characterizeWord = function(word) {
+  let html = "";
+  for(let i = 0; i < word.length; i++) {
+    let char = word.charAt(i);
+    html += characterPrefix + char + characterSuffix;
+  }
+
+  return html;
+}
+
 const  wordToHTML = function(word) {
   let htmlWord = word.length==0 ? '' : characterizeWord(word);
   
@@ -64,12 +74,3 @@ const colorizeLine = function(text, prevColorStateList) {
   return htmlLine;
 }
 
-const characterizeWord = function(word) {
-  let html = "";
-  for(let i = 0; i < word.length; i++) {
-    let char = word.charAt(i);
-    html += characterPrefix + char + characterSuffix;
-  }
-
-  return html;
-}

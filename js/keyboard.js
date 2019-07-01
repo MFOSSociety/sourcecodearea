@@ -35,7 +35,7 @@ const isIgnoreKey = function(keyCode) {
 
 const keyToChar = function(keyCode) {
   let char;
-  if(shiftKey.isPressed()) {
+  if(shiftKey.isPressed() || capsLockKey.isPressed()) {
     char = keymap[keyCode][0];
   } else {
     char = keymap[keyCode][1];
@@ -55,8 +55,16 @@ const handleKeyDown = function(keyCode) {
     ctrlKey.press();
   }
 
+  /*
+    TODO
+    CapsLock Key - keyCode = 20
+  */
+  
+  // Ignore Keys --------------------------------------------------------------------
+  if(keyCode == 20) {}
+
   // Deletion --------------------------------------------------------------------
-  if(keyCode == 13) { // ENTER
+  else if(keyCode == 13) { // ENTER
     // TODO handle brackets indentation (|) {|} [|]
     let charBefore = defaultCaret.getCharacterBefore();
     let charAfter = defaultCaret.getCharacter();
