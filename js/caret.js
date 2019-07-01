@@ -73,7 +73,11 @@ Caret.prototype = {
     let text = line.getCode();
     let newText = text.substring(0, this.col-1) + char + text.substring(this.col-1);
     line.setCode(newText);
-    this.setPos(this.row, this.col+1);
+
+    if(char == '\t')
+      this.setPos(this.row, this.col+tabSize);
+    else
+      this.setPos(this.row, this.col+1);
   },
 
   deleteCharacterBefore: function() {

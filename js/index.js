@@ -12,9 +12,11 @@ $(document).ready(function() {
     // prevent TAB KEY from switching focus
     if(event.keyCode == 9) event.preventDefault();
     
+    // detect capslock
     if (event.originalEvent.getModifierState("CapsLock")) capsLockKey.press();
     else capsLockKey.release();
     
+    // handle key pressed
     handleKeyDown(event.keyCode);
   });
 
@@ -22,9 +24,3 @@ $(document).ready(function() {
     handleKeyUp(event.keyCode);
   });
 });
-
-// TEST
-var foo = function() {
-            document.getElementsByClassName("test")[0].innerHTML = "FOO";
-            return "FOO";
-        };

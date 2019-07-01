@@ -15,7 +15,12 @@ const characterizeWord = function(word) {
   let html = "";
   for(let i = 0; i < word.length; i++) {
     let char = word.charAt(i);
-    html += characterPrefix + char + characterSuffix;
+    if(char == '\t') {
+      for(let i = 0; i<tabSize; i++) html += characterPrefix + '&nbsp;' + characterSuffix;
+    } else {
+      if(char == ' ') char = '&nbsp;';
+      html += characterPrefix + char + characterSuffix;
+    }
   }
 
   return html;
@@ -38,7 +43,7 @@ const  wordToHTML = function(word) {
 const colorizeLine = function(text, prevColorStateList) {
   // TODO handle multiple line coloring
   let htmlLine = "";
-  let char, word="", htmlWord;
+  let char, word="";
   
   for(let i = 0; i < text.length; i++) {
     
@@ -49,26 +54,17 @@ const colorizeLine = function(text, prevColorStateList) {
     if(char.charCodeAt(0) == 160) char = ' ';
     
     if(isWordBreak(char)) {
-      htmlWord = wordToHTML(word);
       
       // WORKAROUND
       // coz HTML handles spaces differently
-      htmlLine += htmlWord;
-      if(char == ' ') {
-        char = '&nbsp;';
-      }
-      
-      htmlWord = characterPrefix + char + characterSuffix;
-      htmlLine += htmlWord;
+      htmlLine += wordToHTML(word);
+      htmlLine += characterizeWord(char);
       word = "";
-    }  else if(i == text.length-1) {
+    } else if(i == text.length-1) {
       word = word + char;
-      htmlWord = wordToHTML(word);
-      htmlLine += htmlWord;
-
-    }else {
+      htmlLine += wordToHTML(word);
+    } else {
       word = word + char;
-      
     }
   }
   return htmlLine;

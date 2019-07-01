@@ -55,11 +55,6 @@ const handleKeyDown = function(keyCode) {
     ctrlKey.press();
   }
 
-  /*
-    TODO
-    CapsLock Key - keyCode = 20
-  */
-  
   // Ignore Keys --------------------------------------------------------------------
   if(keyCode == 20) {}
 
