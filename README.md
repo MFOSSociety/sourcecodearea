@@ -4,7 +4,7 @@ The aim is to process the user input and provide most efficient syntax-highlight
 This is still in pre-alpha stage. Please report all missing/requested features under Issues.
 
 ## Preview
-Clone the repo and pen index.html... and start typing.
+Clone the repo and open index.html... and start typing.
 
 ## Maintainers
 The project is maintained by :
