@@ -1,3 +1,9 @@
+const keywordPrefix = '<div class="keyword">';
+const keywordSuffix = '</div>';
+
+const valuePrefix = '<div class="value">';
+const valueSuffix = '</div>';
+
 const colorMap = {
   'abstract': { prefix: keywordPrefix, suffix: keywordSuffix },
   'assert': { prefix: keywordPrefix, suffix: keywordSuffix },
