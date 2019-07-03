@@ -11,12 +11,12 @@ const isNumber = function(str) {
   return !isNaN(str);
 }
 
-const characterizeWord = function(word) {
+const characterizeWord = function(page, word) {
   let html = "";
   for(let i = 0; i < word.length; i++) {
     let char = word.charAt(i);
     if(char == '\t') {
-      for(let i = 0; i<tabSize; i++) html += characterPrefix + '&nbsp;' + characterSuffix;
+      for(let i = 0; i<page.tabSize; i++) html += characterPrefix + '&nbsp;' + characterSuffix;
     } else {
       if(char == ' ') char = '&nbsp;';
       html += characterPrefix + char + characterSuffix;
@@ -26,8 +26,8 @@ const characterizeWord = function(word) {
   return html;
 }
 
-const  wordToHTML = function(word) {
-  let htmlWord = word.length==0 ? '' : characterizeWord(word);
+const  wordToHTML = function(page, word) {
+  let htmlWord = word.length==0 ? '' : characterizeWord(page, word);
   
   if(isNumber(word)) {
     htmlWord = valuePrefix + htmlWord + valueSuffix;
@@ -40,7 +40,7 @@ const  wordToHTML = function(word) {
   return htmlWord;
 }
 
-const colorizeLine = function(text, prevColorStateList) {
+const colorizeLine = function(page, text, prevColorStateList) {
   // TODO handle multiple line coloring
   let htmlLine = "";
   let char, word="";
@@ -57,12 +57,12 @@ const colorizeLine = function(text, prevColorStateList) {
       
       // WORKAROUND
       // coz HTML handles spaces differently
-      htmlLine += wordToHTML(word);
-      htmlLine += characterizeWord(char);
+      htmlLine += wordToHTML(page, word);
+      htmlLine += characterizeWord(page, char);
       word = "";
     } else if(i == text.length-1) {
       word = word + char;
-      htmlLine += wordToHTML(word);
+      htmlLine += wordToHTML(page, word);
     } else {
       word = word + char;
     }

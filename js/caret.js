@@ -1,4 +1,5 @@
-function Caret(id, row, col) {
+function Caret(page, id, row, col) {
+  this.page = page;
   this.id = id;
   this.row = row;
   this.col = col;
@@ -19,28 +20,32 @@ Caret.prototype = {
     this.col = col;
     
     let el = this.getCharacterElementBefore();
-    let caretElement = document.getElementById(`caret_${this.id}`);
+    let caretElement = $(`#caret_${this.page.getId()}_${this.id}`);
 
     let top, left;
     if(this.row == 1) top = 0;
-    else top = $(`.line:nth-child(${this.row})`).position().top;
-    if(this.col == 1 || el == undefined) left = $(`.line:nth-child(${this.row}) .linenum`).width() + 10;
+    else top = $(`#${this.page.getId()} .line:nth-child(${this.row})`).position().top;
+    if(this.col == 1 || el == undefined) left = $(`#${this.page.getId()} .line:nth-child(${this.row}) .linenum`).width() + 10;
     else left = $(el).position().left + $(el).width();
 
-    caretElement.style.top = `${top}px`;
-    caretElement.style.left = `${left}px`;
+    // caretElement = $(caretElement)[0];
+    $(caretElement).css('top', `${top}px`);
+    $(caretElement).css('left', `${left}px`);
   },
 
   getCharacterElementBefore: function() {
-    return (document.getElementsByClassName("line")[this.row-1]).querySelectorAll(".character")[this.col-2];
+    let parent = document.getElementById(`${this.page.getId()}`);
+    return (parent.getElementsByClassName("line")[this.row-1]).querySelectorAll(".character")[this.col-2];
   },
 
   getCharacterElement: function() {
-    return (document.getElementsByClassName("line")[this.row-1]).querySelectorAll(".character")[this.col-1];
+    let parent = document.getElementById(`${this.page.getId()}`);
+    return (parent.getElementsByClassName("line")[this.row-1]).querySelectorAll(".character")[this.col-1];
   },
 
   getCharacterElementAfter: function() {
-    return (document.getElementsByClassName("line")[this.row-1]).querySelectorAll(".character")[this.col];
+    let parent = document.getElementById(`${this.page.getId()}`);
+    return (parent.getElementsByClassName("line")[this.row-1]).querySelectorAll(".character")[this.col];
   },
 
   getCharacterBefore: function() {
@@ -62,20 +67,21 @@ Caret.prototype = {
   },
 
   show: function() {
-    let html = `<div class="caret" id="caret_${this.id}"></div>`;
+    let html = `<div id="caret_${this.page.getId()}_${this.id}" class="caret"></div>`;
+    // let parent = document.getElementById(`${this.page.getId()}`);
     document.body.innerHTML += html;
 
     this.setPos(this.row, this.col);
   },
 
   insertCharacter: function(char) {
-    let line = lineRef[this.row-1];
+    let line = this.page.getLineRef(this.row);
     let text = line.getCode();
     let newText = text.substring(0, this.col-1) + char + text.substring(this.col-1);
     line.setCode(newText);
 
     if(char == '\t')
-      this.setPos(this.row, this.col+tabSize);
+      this.setPos(this.row, this.col+this.page.tabSize);
     else
       this.setPos(this.row, this.col+1);
   },
@@ -83,30 +89,30 @@ Caret.prototype = {
   deleteCharacterBefore: function() {
     if(this.col == 1) { // delete current line if line is empty
       if(this.row > 1) {
-        let prevLine = lineRef[defaultCaret.getRow()-2];
+        let prevLine = this.page.getLineRef(this.getRow()-1);
         let prevCode = prevLine.getCode();
 
-        let curLine = lineRef[defaultCaret.getRow()-1];
+        let curLine = this.page.getLineRef(this.getRow());
         let curCode = curLine.getCode();
 
         let newCol = prevCode.length + 1;
         prevCode = prevCode + curCode;
         prevLine.setCode(prevCode);
-        deleteLine(defaultCaret.getRow());
-        defaultCaret.setPos(defaultCaret.getRow()-1, newCol);
+        this.page.deleteLine(this.getRow());
+        this.setPos(this.getRow()-1, newCol);
       }
     } else { // delete previous character
-      let line = lineRef[this.row-1];
+      let line = this.page.getLineRef(this.row);
       let code = line.getCode();
       code = code.substring(0, this.col-2) +
-             code.substring(defaultCaret.getCol()-1);
+             code.substring(this.getCol()-1);
       line.setCode(code);
       this.setPos(this.row, this.col-1);
     }
   },
 
   insertNewLineBelow: function() {
-    insertNewLineAfter(this.row);
+    this.page.insertNewLineAfter(this.row);
     this.setPos(this.row+1, 1);
   },
 
@@ -117,7 +123,7 @@ Caret.prototype = {
     if(newRow < 1) newRow = 1;
     
     newCol = this.col;
-    let line = lineRef[newRow-1];
+    let line = this.page.getLineRef(newRow);
     let len = line.getCode().length;
     if(newCol>len) newCol = len+1;
 
@@ -128,10 +134,10 @@ Caret.prototype = {
     let newRow, newCol;
 
     newRow = this.row + 1;
-    if(newRow > lineRef.length) newRow = lineRef.length;
+    if(newRow > this.page.lineRef.length) newRow = this.page.lineRef.length;
 
     newCol = this.col;
-    let line = lineRef[newRow-1];
+    let line = this.page.getLineRef(newRow);
     let len = line.getCode().length;
     if(newCol>len) newCol = len+1;
 
@@ -147,7 +153,7 @@ Caret.prototype = {
         newRow = 1;
         newCol = 1;
       } else {
-        let line = lineRef[newRow-1];
+        let line = this.page.getLineRef(newRow);
         newCol = line.getCode().length + 1;
       }
     } else { // else jump to previouse character
@@ -161,7 +167,7 @@ Caret.prototype = {
   moveRight: function() {
     let newRow, newCol;
 
-    let line = lineRef[this.row - 1];
+    let line = this.page.getLineRef(this.row);
     let end = line.getCode().length + 1;
     if(end == this.col) { // if caret is at end, jump to next line
       newRow = this.row + 1;

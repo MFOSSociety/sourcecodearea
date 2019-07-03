@@ -1,19 +1,21 @@
-const initNewDoc = function() {
-  document.getElementById("page").style.height = `${window.innerHeight}px`;
-  document.getElementById("page").style.width = `${window.innerWidth}px`;
-  insertNewLineAfter(1);
-  defaultCaret.show();
+var page0;
+
+const initNewPage = function(id) {
+  let page = new Page(id, window.innerWidth, window.innerHeight);
+  page.insertNewLineAfter(1);
+  page.defaultCaret.show();
+  return page;
 }
 
 $(document).ready(function() {
   console.log('READY');
  
-  initNewDoc();
+  page0 = initNewPage('page');
 
   window.onresize = function() {
-    document.getElementById("page").style.height = `${window.innerHeight}px`;
-    document.getElementById("page").style.width = `${window.innerWidth}px`;
-    defaultCaret.show();
+    page0.setWidth(window.innerWidth);
+    page0.setHeight(window.innerHeight);
+    page0.defaultCaret.setPos(page0.defaultCaret.getRow(), page0.defaultCaret.getCol());
   } 
 
   $(document).on('keydown', function(event) {
@@ -25,7 +27,7 @@ $(document).ready(function() {
     else capsLockKey.release();
     
     // handle key pressed
-    handleKeyDown(event.keyCode);
+    handleKeyDown(page0, event.keyCode);
   });
 
   $(document).on('keyup', function(event) {

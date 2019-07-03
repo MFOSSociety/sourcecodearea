@@ -44,7 +44,7 @@ const keyToChar = function(keyCode) {
 }
 
 // KEYDOWN
-const handleKeyDown = function(keyCode) {
+const handleKeyDown = function(page, keyCode) {
   var tmpkey = String.fromCharCode(keyCode);
   // console.log(tmpkey + ' ' + keyCode);
 
@@ -61,43 +61,43 @@ const handleKeyDown = function(keyCode) {
   // Deletion --------------------------------------------------------------------
   else if(keyCode == 13) { // ENTER
     // TODO handle brackets indentation (|) {|} [|]
-    let charBefore = defaultCaret.getCharacterBefore();
-    let charAfter = defaultCaret.getCharacter();
+    // let charBefore = page.defaultCaret.getCharacterBefore();
+    // let charAfter = page.defaultCaret.getCharacter();
     
-    let line = lineRef[defaultCaret.getRow()-1];
+    let line = page.getLineRef(page.defaultCaret.getRow());
     let curCode = line.getCode();
-    let codeAfterCaret = curCode.substring(defaultCaret.getCol()-1);
-    curCode = curCode.substring(0, defaultCaret.getCol()-1);
+    let codeAfterCaret = curCode.substring(page.defaultCaret.getCol()-1);
+    curCode = curCode.substring(0, page.defaultCaret.getCol()-1);
     line.setCode(curCode);
     
-    defaultCaret.insertNewLineBelow();
-    line = lineRef[defaultCaret.getRow()-1];
+    page.defaultCaret.insertNewLineBelow();
+    line = page.getLineRef(page.defaultCaret.getRow());
     line.setCode(codeAfterCaret);
   } 
   else if(keyCode == 8) { // BACKSPACE
     // TODO handle matching pairs: [] () {} '' "    
-    defaultCaret.deleteCharacterBefore();
+    page.defaultCaret.deleteCharacterBefore();
   }
   
   else if(keyCode == 46) { // DELETE
-    let char = defaultCaret.getCharacter();
-    let row = defaultCaret.getRow();
-    let col = defaultCaret.getCol();
+    let char = page.defaultCaret.getCharacter();
+    let row = page.defaultCaret.getRow();
+    let col = page.defaultCaret.getCol();
 
     if(char == undefined) { // delete linechange
-      if( !(row+1 > lineRef.length) ) { // if next line exists
-        let line = lineRef[row-1];
+      if( !(row+1 > page.lineRef.length) ) { // if next line exists
+        let line = page.getLineRef(row);
         let curCode = line.getCode();
 
-        let nextLine = lineRef[row];
+        let nextLine = page.getLineRef(row+1);
         let nextCode = nextLine.getCode();
 
         curCode = curCode + nextCode;
-        deleteLine(row+1);
+        page.deleteLine(row+1);
         line.setCode(curCode);        
       }
     } else { // delete character
-      let line = lineRef[row-1];
+      let line = page.getLineRef(row);
       let code = line.getCode();
       code = code.substring(0, col-1) + code.substring(col);
       line.setCode(code);      
@@ -106,33 +106,33 @@ const handleKeyDown = function(keyCode) {
 
   // Navigation --------------------------------------------------------------------
   else if(keyCode == 38) { // UP ARROW KEY
-    defaultCaret.moveUp();
+    page.defaultCaret.moveUp();
   }
   else if(keyCode == 40) { // DOWN ARROW KEY
-    defaultCaret.moveDown();
+    page.defaultCaret.moveDown();
   }
   else if(keyCode == 37) { // LEFT ARROW KEY
-    defaultCaret.moveLeft();
+    page.defaultCaret.moveLeft();
   }
   else if(keyCode == 39) { // RIGHT ARROW KEY
-    defaultCaret.moveRight();
+    page.defaultCaret.moveRight();
   }
   else if(keyCode == 36) { // HOME
-    defaultCaret.setPos(defaultCaret.getRow(), 1);
+    page.defaultCaret.setPos(page.defaultCaret.getRow(), 1);
   }
   else if(keyCode == 35) { // END
-    let newRow = defaultCaret.getRow();
-    let line = lineRef[newRow-1];
+    let newRow = page.defaultCaret.getRow();
+    let line = page.getLineRef(newRow);
     let newCol = line.getCode().length + 1;
     
-    defaultCaret.setPos(newRow, newCol);
+    page.defaultCaret.setPos(newRow, newCol);
   }
 
   // Insertion --------------------------------------------------------------------
   else {
     if(!isIgnoreKey(keyCode)) {
       let char = keyToChar(keyCode);
-      defaultCaret.insertCharacter(char);
+      page.defaultCaret.insertCharacter(char);
     }
   }
 }
