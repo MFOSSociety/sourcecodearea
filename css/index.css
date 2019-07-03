@@ -26,15 +26,16 @@ body {
   
   font-size: 2vh;
   padding: 2px 5px;
-
   z-index: 2;
 }
 .line .linenum {
   display: inline-block;
+  min-height: 2vh;
 }
 .line .code {
   display: inline-block;
   margin: 0px 5px;
+  min-height: 2vh;
 }
 
 .character {
