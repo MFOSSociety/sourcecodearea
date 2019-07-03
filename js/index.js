@@ -22,9 +22,17 @@ $(document).ready(function() {
     // prevent TAB KEY from switching focus
     if(event.keyCode == 9) event.preventDefault();
     
-    // detect capslock
+    // toggle capslock
     if (event.originalEvent.getModifierState("CapsLock")) capsLockKey.press();
     else capsLockKey.release();
+
+    // toggle shiftkey
+    if(event.shiftKey) shiftKey.press();
+    else shiftKey.release();
+
+    // toggle ctrlKey
+    if(event.ctrlKey) ctrlKey.press();
+    else ctrlKey.release();
     
     // handle key pressed
     handleKeyDown(page0, event.keyCode);

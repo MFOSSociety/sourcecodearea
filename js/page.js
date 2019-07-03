@@ -18,13 +18,13 @@ Page.prototype = {
     return this.width;
   },
   setWidth: function(width) {
-    document.getElementById("page").style.width = `${width}px`;
+    document.getElementById(`${this.id}`).style.width = `${width}px`;
   },
   getHeight: function() {
     return this.height;
   },
   setHeight: function(height) {
-    document.getElementById("page").style.height = `${height}`;
+    document.getElementById(`${this.id}`).style.height = `${height}`;
   },
 
   getLineRef: function(lineNum) {

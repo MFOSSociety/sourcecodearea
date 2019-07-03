@@ -48,13 +48,6 @@ const handleKeyDown = function(page, keyCode) {
   var tmpkey = String.fromCharCode(keyCode);
   // console.log(tmpkey + ' ' + keyCode);
 
-  // TRIGGER HELPER KEYS: CTRL, SHIFT
-  if(keyCode == shiftKey.keyCode) {
-    shiftKey.press();
-  } else if(keyCode == ctrlKey.keyCode) {
-    ctrlKey.press();
-  }
-
   // Ignore Keys --------------------------------------------------------------------
   if(keyCode == 20) {}
 
@@ -139,9 +132,5 @@ const handleKeyDown = function(page, keyCode) {
 
 // KEYUP
 const handleKeyUp = function(keyCode) {
-  if(keyCode == shiftKey.keyCode) {
-    shiftKey.release();
-  } else if(keyCode == ctrlKey.keyCode) {
-    ctrlKey.release();
-  }
+  
 }

@@ -68,7 +68,6 @@ Caret.prototype = {
 
   show: function() {
     let html = `<div id="caret_${this.page.getId()}_${this.id}" class="caret"></div>`;
-    // let parent = document.getElementById(`${this.page.getId()}`);
     document.body.innerHTML += html;
 
     this.setPos(this.row, this.col);
