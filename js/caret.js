@@ -24,7 +24,13 @@ Caret.prototype = {
     let top, left;
     if(this.row == 1) top = 0;
     else top = $(`.line:nth-child(${this.row})`).position().top;
-    if(this.col == 1 || el == undefined) left = 15;
+    if(this.col == 1 || el == undefined) {
+      if(el == undefined) {
+        left = $(`.line:nth-child(${this.row}) .linenum`).width() + 10;
+        console.log(`> ${left}`);
+      } else 
+      left = 15;
+    }
     else left = $(el).position().left + $(el).width();
 
     caretElement.style.top = `${top}px`;

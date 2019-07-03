@@ -46,7 +46,7 @@ const keyToChar = function(keyCode) {
 // KEYDOWN
 const handleKeyDown = function(keyCode) {
   var tmpkey = String.fromCharCode(keyCode);
-  console.log(tmpkey + ' ' + keyCode);
+  // console.log(tmpkey + ' ' + keyCode);
 
   // TRIGGER HELPER KEYS: CTRL, SHIFT
   if(keyCode == shiftKey.keyCode) {
