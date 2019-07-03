@@ -131,6 +131,6 @@ const handleKeyDown = function(page, keyCode) {
 }
 
 // KEYUP
-const handleKeyUp = function(keyCode) {
+const handleKeyUp = function(page, keyCode) {
   
 }

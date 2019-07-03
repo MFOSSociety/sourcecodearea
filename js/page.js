@@ -8,7 +8,14 @@ function Page(id, width, height) {
 }
 
 Page.prototype = {
-  constructor: Page,
+  constructor: function(id, width, height) {
+    this.id = id;
+    this.width = width;
+    this.height = height;
+    this.lineRef = [];
+    this.tabSize = 4;
+    this.defaultCaret = new Caret(this, 0,1,1);
+  },
 
   getId: function() {
     return this.id;
@@ -75,3 +82,43 @@ Page.prototype = {
       this.lineRef[i].setLineNum(this.lineRef[i].getLineNum()-1);
   }
 }
+
+const initNewPage = function(id) {
+  let page = new Page(id, window.innerWidth, window.innerHeight);
+  page.insertNewLineAfter(1);
+  page.defaultCaret.show();
+
+  window.onresize = function() {
+    page.setWidth(window.innerWidth);
+    page.setHeight(window.innerHeight);
+    page.defaultCaret.setPos(page0.defaultCaret.getRow(), page0.defaultCaret.getCol());
+  }
+
+  $(document).on('keydown', function(event) {
+    // prevent TAB KEY from switching focus
+    if(event.keyCode == 9) event.preventDefault();
+    
+    // toggle capslock
+    if (event.originalEvent.getModifierState("CapsLock")) capsLockKey.press();
+    else capsLockKey.release();
+
+    // toggle shiftkey
+    if(event.shiftKey) shiftKey.press();
+    else shiftKey.release();
+
+    // toggle ctrlKey
+    if(event.ctrlKey) ctrlKey.press();
+    else ctrlKey.release();
+    
+    // handle key pressed
+    handleKeyDown(page, event.keyCode);
+  });
+
+  $(document).on('keyup', function(event) {
+    handleKeyUp(page, event.keyCode);
+  });
+
+  return page;
+}
+
+
