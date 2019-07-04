@@ -76,7 +76,17 @@ Caret.prototype = {
   insertCharacter: function(char) {
     let line = this.page.getLineRef(this.row);
     let text = line.getCode();
-    let newText = text.substring(0, this.col-1) + char + text.substring(this.col-1);
+
+    let str;
+    if(isCharMapValue(char) && (this.getCharacter()==char)) {
+      str = '';
+    } else if(isCharMapKey(char)) {
+      str = char + getCharMapValue(char);
+    } else {
+      str = char;
+    }
+
+    let newText = text.substring(0, this.col-1) + str + text.substring(this.col-1);
     line.setCode(newText);
 
     if(char == '\t')
@@ -103,8 +113,19 @@ Caret.prototype = {
     } else { // delete previous character
       let line = this.page.getLineRef(this.row);
       let code = line.getCode();
-      code = code.substring(0, this.col-2) +
-             code.substring(this.getCol()-1);
+
+      let prevChar = this.getCharacterBefore();
+      if(isCharMapKey(prevChar)) {
+        let nextChar = this.getCharacter();
+        if(getCharMapValue(prevChar) == nextChar) {
+          code = code.substring(0, this.col-2) + code.substring(this.getCol());
+        } else {
+          code = code.substring(0, this.col-2) + code.substring(this.getCol()-1);
+        }
+      } else {
+        code = code.substring(0, this.col-2) + code.substring(this.getCol()-1);
+      }
+
       line.setCode(code);
       this.setPos(this.row, this.col-1);
     }

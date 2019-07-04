@@ -28,12 +28,22 @@ Line.prototype = {
 
   setLineNum: function(num) {
     this.lineNum = num;
-    // let el = document.getElementsByClassName("linenum")[this.lineNum-1];
     let el = $(`${this.page.getId()} .linenum:nth-child(${this.lineNum})`);
     $(el).html(num);
   },
   getLineNum: function() {
     return this.lineNum;
+  },
+
+  getIndentationSize: function() {
+    let code = this.getCode();
+    let len = 0;
+    
+    // WORKAROUND
+    // HTML stores (char)32 as (char)160
+    const whitespace = String.fromCharCode(160);
+    for(let i=0;i<code.length && code.charAt(i)==whitespace;i++) len++;
+    return len;
   }
 
   // TODO

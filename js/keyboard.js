@@ -1,6 +1,9 @@
-function Key(keyCode, char) {
+/*
+  Key simulates keyboard keys
+  @keyCode: value of key
+*/
+function Key(keyCode) {
   this.keyCode = keyCode;
-  this.char = char;
   this.down = false;
 }
 
@@ -20,14 +23,32 @@ Key.prototype = {
   }
 }
 
-const isAlphabetKey = function(keyCode) {
-  return keyCode>=65 && keyCode<=90;
+// --------------------------------------------------------------------------
+// Key handling tools
+
+// const isAlphabetKey = function(keyCode) {
+//   return keyCode>=65 && keyCode<=90;
+// }
+// const isNumericKey = function(keyCode) {
+//   return keyCode>=48 && keyCode<=59;
+// }
+// const isAlphaNumericKey = function(keyCode) {
+//   return isAlphabetKey(keyCode) || isNumericKey(keyCode);
+// }
+const isCharMapKey = function(char) {
+  return charMap[char] !== undefined;
 }
-const isNumericKey = function(keyCode) {
-  return keyCode>=48 && keyCode<=59;
+const isCharMapValue = function(char) {
+  for(let key in charMap) {
+    if(charMap.hasOwnProperty(key)) {
+      if(char == charMap[key])
+        return true;
+    }
+  }
+  return false;
 }
-const isAlphaNumericKey = function(keyCode) {
-  return isAlphabetKey(keyCode) || isNumericKey(keyCode);
+const getCharMapValue = function(char) {
+  return charMap[char];
 }
 const isIgnoreKey = function(keyCode) {
   return ignoreKeyList.includes(keyCode);
@@ -43,6 +64,7 @@ const keyToChar = function(keyCode) {
   return char;
 }
 
+// --------------------------------------------------------------------------
 // KEYDOWN
 const handleKeyDown = function(page, keyCode) {
   var tmpkey = String.fromCharCode(keyCode);
@@ -54,18 +76,50 @@ const handleKeyDown = function(page, keyCode) {
   // Deletion --------------------------------------------------------------------
   else if(keyCode == 13) { // ENTER
     // TODO handle brackets indentation (|) {|} [|]
-    // let charBefore = page.defaultCaret.getCharacterBefore();
-    // let charAfter = page.defaultCaret.getCharacter();
-    
-    let line = page.getLineRef(page.defaultCaret.getRow());
-    let curCode = line.getCode();
-    let codeAfterCaret = curCode.substring(page.defaultCaret.getCol()-1);
-    curCode = curCode.substring(0, page.defaultCaret.getCol()-1);
-    line.setCode(curCode);
-    
-    page.defaultCaret.insertNewLineBelow();
-    line = page.getLineRef(page.defaultCaret.getRow());
-    line.setCode(codeAfterCaret);
+    let prevChar = page.defaultCaret.getCharacterBefore(),
+        curChar = page.defaultCaret.getCharacter();
+    if( isCharMapKey(prevChar) && getCharMapValue(prevChar)==curChar ) {
+
+      page.insertNewLineAfter(page.defaultCaret.getRow());
+      page.insertNewLineAfter(page.defaultCaret.getRow()+1);
+
+      let line0 = page.getLineRef(page.defaultCaret.getRow());
+      let line1 = page.getLineRef(page.defaultCaret.getRow()+1);
+      let line2 = page.getLineRef(page.defaultCaret.getRow()+2);
+
+      let code = line0.getCode();
+      let codeAfter = code.substring(page.defaultCaret.getCol()-1);
+      code = code.substring(0, page.defaultCaret.getCol()-1);
+
+      let indentationSize = line0.getIndentationSize();
+      let prefix = '';
+      for(let i=0;i<indentationSize;i++) prefix += ' ';
+      let tab = '';
+      for(let i=0;i<page.tabSize;i++) tab += ' ';
+
+      line0.setCode(code);
+      line1.setCode(prefix+tab);
+      line2.setCode(prefix+codeAfter);
+
+      page.defaultCaret.setPos(page.defaultCaret.getRow()+1, (prefix+tab).length+1);    
+    } else {
+      
+      let line = page.getLineRef(page.defaultCaret.getRow());
+      
+      let indentationSize = line.getIndentationSize();
+      let prefix = '';
+      for(let i=0;i<indentationSize;i++) prefix += ' ';
+      
+      let curCode = line.getCode();
+      let codeAfterCaret = curCode.substring(page.defaultCaret.getCol()-1);
+      curCode = curCode.substring(0, page.defaultCaret.getCol()-1);
+      line.setCode(curCode);
+      
+      page.insertNewLineAfter(page.defaultCaret.getRow());
+      line = page.getLineRef(page.defaultCaret.getRow()+1);
+      line.setCode(prefix + codeAfterCaret);
+      page.defaultCaret.setPos(page.defaultCaret.getRow()+1, (prefix.length+1));
+    }
   } 
   else if(keyCode == 8) { // BACKSPACE
     // TODO handle matching pairs: [] () {} '' "    
@@ -130,6 +184,7 @@ const handleKeyDown = function(page, keyCode) {
   }
 }
 
+// --------------------------------------------------------------------------
 // KEYUP
 const handleKeyUp = function(page, keyCode) {
   
