@@ -1,7 +1,6 @@
 function Line(page, lineNum) {
   this.page = page;
   this.lineNum = lineNum;
-  this.colorState = [];
 }
 
 Line.prototype = {
@@ -21,14 +20,14 @@ Line.prototype = {
     let text = this.getCode();
     if(text == undefined) text = '';
 
-    let textHTML = `<pre class="code">${text}</pre>`;
+    let textHTML = `<div class="code">${text}</div>`;
 
     return linenumHTML + textHTML;
   },
 
   setLineNum: function(num) {
     this.lineNum = num;
-    let el = $(`${this.page.getId()} .linenum:nth-child(${this.lineNum})`);
+    let el = $(`#${this.page.getId()} .line:nth-child(${this.lineNum}) .linenum`);
     $(el).html(num);
   },
   getLineNum: function() {
@@ -45,10 +44,5 @@ Line.prototype = {
     for(let i=0;i<code.length && code.charAt(i)==whitespace;i++) len++;
     return len;
   }
-
-  // TODO
-  /*
-    init colorState[]
-  */
 }
 

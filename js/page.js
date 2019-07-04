@@ -69,8 +69,10 @@ Page.prototype = {
     
     // update lineRef
     this.lineRef.splice(newLine.getLineNum()-1, 0, newLine);
-    for(let l = newLineNum; l < this.lineRef.length; l++) 
+    for(let l = newLineNum; l < this.lineRef.length; l++) {
+      console.log(this.lineRef[l].getLineNum());
       this.lineRef[l].setLineNum(this.lineRef[l].getLineNum()+1);
+    }
   },
 
   deleteLine: function(lineNum) {

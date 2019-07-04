@@ -75,7 +75,6 @@ const handleKeyDown = function(page, keyCode) {
 
   // Deletion --------------------------------------------------------------------
   else if(keyCode == 13) { // ENTER
-    // TODO handle brackets indentation (|) {|} [|]
     let prevChar = page.defaultCaret.getCharacterBefore(),
         curChar = page.defaultCaret.getCharacter();
     if( isCharMapKey(prevChar) && getCharMapValue(prevChar)==curChar ) {
@@ -122,7 +121,6 @@ const handleKeyDown = function(page, keyCode) {
     }
   } 
   else if(keyCode == 8) { // BACKSPACE
-    // TODO handle matching pairs: [] () {} '' "    
     page.defaultCaret.deleteCharacterBefore();
   }
   
