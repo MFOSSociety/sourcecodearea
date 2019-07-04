@@ -1,6 +1,6 @@
 /*
   Key simulates keyboard keys
-  @keyCode: value of key
+  @keyCode: integer value of key
 */
 function Key(keyCode) {
   this.keyCode = keyCode;
@@ -71,9 +71,63 @@ const handleKeyDown = function(page, keyCode) {
   // console.log(tmpkey + ' ' + keyCode);
 
   // Ignore Keys --------------------------------------------------------------------
-  if(keyCode == 20) {}
+  if(isIgnoreKey(keyCode)) {}
 
-  // Deletion --------------------------------------------------------------------
+  // Navigation --------------------------------------------------------------------
+  else if(keyCode == 38) { // UP ARROW KEY
+    page.defaultCaret.moveUp();
+  }
+  else if(keyCode == 40) { // DOWN ARROW KEY
+    page.defaultCaret.moveDown();
+  }
+  else if(keyCode == 37) { // LEFT ARROW KEY
+    page.defaultCaret.moveLeft();
+  }
+  else if(keyCode == 39) { // RIGHT ARROW KEY
+    page.defaultCaret.moveRight();
+  }
+  else if(keyCode == 36) { // HOME
+    page.defaultCaret.setPos(page.defaultCaret.getRow(), 1);
+  }
+  else if(keyCode == 35) { // END
+    let newRow = page.defaultCaret.getRow();
+    let line = page.getLineRef(newRow);
+    let newCol = line.getCode().length + 1;
+    
+    page.defaultCaret.setPos(newRow, newCol);
+  }
+
+  // Deletion -------------------------------------------------------------------- 
+  else if(keyCode == 8) { // BACKSPACE
+    page.defaultCaret.deleteCharacterBefore();
+  }
+  
+  else if(keyCode == 46) { // DELETE
+    let char = page.defaultCaret.getCharacter();
+    let row = page.defaultCaret.getRow();
+    let col = page.defaultCaret.getCol();
+
+    if(char == undefined) { // delete linechange
+      if( !(row+1 > page.lineRef.length) ) { // if next line exists
+        let line = page.getLineRef(row);
+        let curCode = line.getCode();
+
+        let nextLine = page.getLineRef(row+1);
+        let nextCode = nextLine.getCode();
+
+        curCode = curCode + nextCode;
+        page.deleteLine(row+1);
+        line.setCode(curCode);        
+      }
+    } else { // delete character
+      let line = page.getLineRef(row);
+      let code = line.getCode();
+      code = code.substring(0, col-1) + code.substring(col);
+      line.setCode(code);      
+    }
+  }
+
+  // Insertion --------------------------------------------------------------------
   else if(keyCode == 13) { // ENTER
     let prevChar = page.defaultCaret.getCharacterBefore(),
         curChar = page.defaultCaret.getCharacter();
@@ -119,61 +173,7 @@ const handleKeyDown = function(page, keyCode) {
       line.setCode(prefix + codeAfterCaret);
       page.defaultCaret.setPos(page.defaultCaret.getRow()+1, (prefix.length+1));
     }
-  } 
-  else if(keyCode == 8) { // BACKSPACE
-    page.defaultCaret.deleteCharacterBefore();
   }
-  
-  else if(keyCode == 46) { // DELETE
-    let char = page.defaultCaret.getCharacter();
-    let row = page.defaultCaret.getRow();
-    let col = page.defaultCaret.getCol();
-
-    if(char == undefined) { // delete linechange
-      if( !(row+1 > page.lineRef.length) ) { // if next line exists
-        let line = page.getLineRef(row);
-        let curCode = line.getCode();
-
-        let nextLine = page.getLineRef(row+1);
-        let nextCode = nextLine.getCode();
-
-        curCode = curCode + nextCode;
-        page.deleteLine(row+1);
-        line.setCode(curCode);        
-      }
-    } else { // delete character
-      let line = page.getLineRef(row);
-      let code = line.getCode();
-      code = code.substring(0, col-1) + code.substring(col);
-      line.setCode(code);      
-    }
-  }
-
-  // Navigation --------------------------------------------------------------------
-  else if(keyCode == 38) { // UP ARROW KEY
-    page.defaultCaret.moveUp();
-  }
-  else if(keyCode == 40) { // DOWN ARROW KEY
-    page.defaultCaret.moveDown();
-  }
-  else if(keyCode == 37) { // LEFT ARROW KEY
-    page.defaultCaret.moveLeft();
-  }
-  else if(keyCode == 39) { // RIGHT ARROW KEY
-    page.defaultCaret.moveRight();
-  }
-  else if(keyCode == 36) { // HOME
-    page.defaultCaret.setPos(page.defaultCaret.getRow(), 1);
-  }
-  else if(keyCode == 35) { // END
-    let newRow = page.defaultCaret.getRow();
-    let line = page.getLineRef(newRow);
-    let newCol = line.getCode().length + 1;
-    
-    page.defaultCaret.setPos(newRow, newCol);
-  }
-
-  // Insertion --------------------------------------------------------------------
   else {
     if(!isIgnoreKey(keyCode)) {
       let char = keyToChar(keyCode);
@@ -184,6 +184,6 @@ const handleKeyDown = function(page, keyCode) {
 
 // --------------------------------------------------------------------------
 // KEYUP
-const handleKeyUp = function(page, keyCode) {
+// const handleKeyUp = function(page, keyCode) {
   
-}
+// }

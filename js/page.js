@@ -26,12 +26,14 @@ Page.prototype = {
   },
   setWidth: function(width) {
     document.getElementById(`${this.id}`).style.width = `${width}px`;
+    this.defaultCaret.setPos(this.defaultCaret.getRow(), this.defaultCaret.getCol());
   },
   getHeight: function() {
     return this.height;
   },
   setHeight: function(height) {
     document.getElementById(`${this.id}`).style.height = `${height}`;
+    this.defaultCaret.setPos(this.defaultCaret.getRow(), this.defaultCaret.getCol());
   },
 
   getLineRef: function(lineNum) {
@@ -90,12 +92,6 @@ const initNewPage = function(id) {
   page.insertNewLineAfter(1);
   page.defaultCaret.show();
 
-  window.onresize = function() {
-    page.setWidth(window.innerWidth);
-    page.setHeight(window.innerHeight);
-    page.defaultCaret.setPos(page0.defaultCaret.getRow(), page0.defaultCaret.getCol());
-  }
-
   $(document).on('keydown', function(event) {
     // prevent TAB KEY from switching focus
     if(event.keyCode == 9) event.preventDefault();
@@ -116,9 +112,9 @@ const initNewPage = function(id) {
     handleKeyDown(page, event.keyCode);
   });
 
-  $(document).on('keyup', function(event) {
-    handleKeyUp(page, event.keyCode);
-  });
+  // $(document).on('keyup', function(event) {
+  //   handleKeyUp(page, event.keyCode);
+  // });
 
   return page;
 }

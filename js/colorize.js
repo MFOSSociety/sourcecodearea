@@ -8,10 +8,16 @@ const getColorClass = function(word) {
 }
 
 const isNumber = function(str) {
-  return !isNaN(str);
+  let flag = false;
+  for(let i=0;i<str.length;i++) {
+    let c = str.charCodeAt(i);
+    if(c<48 || c>57) return false;
+    flag = true;
+  }
+  return flag;
 }
 
-const characterizeWord = function(page, word) {
+const characterizeString = function(page, word) {
   let html = "";
   for(let i = 0; i < word.length; i++) {
     let char = word.charAt(i);
@@ -27,15 +33,14 @@ const characterizeWord = function(page, word) {
   return html;
 }
 
-const  colorizeHTML = function(page, word) {
-  let htmlWord = word.length==0 ? '' : characterizeWord(page, word);
+const  colorizeWord = function(page, word) {
+  let htmlWord = word.length==0 ? '' : characterizeString(page, word);
   
   if(isNumber(word)) {
     htmlWord = `<div class="${valueColor}">` + htmlWord + '</div>';
   } else {
     let color = colorMap[word];
-    if(color != undefined) {
-      // let prefix = ``
+    if(color !== undefined) {
       htmlWord = `<div class="${color.className}">` + htmlWord + '</div>';
     }
   }
@@ -58,12 +63,12 @@ const colorizeString = function(page, text) {
       
       // WORKAROUND
       // coz HTML handles spaces differently
-      htmlLine += colorizeHTML(page, word);
-      htmlLine += characterizeWord(page, char);
+      htmlLine += colorizeWord(page, word);
+      htmlLine += characterizeString(page, char);
       word = "";
     } else if(i == text.length-1) {
       word = word + char;
-      htmlLine += colorizeHTML(page, word);
+      htmlLine += colorizeWord(page, word);
     } else {
       word = word + char;
     }
@@ -77,19 +82,14 @@ const colorizeLine = function(page, text) {
   let slCommentIndex = text.indexOf('//');
 
   if(slCommentIndex != -1) {
-
     let prefix = text.substring(0, slCommentIndex);
-    prefix = colorizeString(page, prefix);
-    
-    let suffix = text.substring(slCommentIndex);
-    suffix = characterizeWord(page, suffix);
+    let suffix = characterizeString(page, text.substring(slCommentIndex));
 
-    let color = getColorClass(singleLineCommentKey);
-    html = prefix + `<div class=${color.className}">` + suffix + '</div>';
+    html = colorizeString(page, prefix) + `<div class="${getColorClass(singleLineCommentKey).className}">` + suffix + '</div>';
   } else {
     html = colorizeString(page, text);
   }
-  // console.log(html);
+
   return html;
 
 }

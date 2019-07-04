@@ -20,7 +20,7 @@ Line.prototype = {
     let text = this.getCode();
     if(text == undefined) text = '';
 
-    let textHTML = `<div class="code">${text}</div>`;
+    let textHTML = `<pre class="code">${text}</pre>`;
 
     return linenumHTML + textHTML;
   },

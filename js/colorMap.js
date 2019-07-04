@@ -1,10 +1,9 @@
 const keywordColor = 'keyword';
 const valueColor = 'value';
-const commentColor = 'xyz';
+const commentColor = 'comment';
 
-const singleLineCommentKey = '//';
 
-const colorMap = {
+var colorMap = {
   'abstract': { className: keywordColor },
   'assert': { className: keywordColor },
   'boolean': { className: keywordColor },
@@ -60,7 +59,8 @@ const colorMap = {
   'false': { className: valueColor, },
   'null': { className: valueColor, },
 
-  '//': { className: commentColor }
+  // '//': { className: commentColor }
 };
 
-// colorMap[singleLineCommentKey] = { className: commentColor };
+const singleLineCommentKey = '//';
+colorMap[singleLineCommentKey] = { className: commentColor };
