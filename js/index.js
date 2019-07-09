@@ -1,26 +1,13 @@
-const initNewDoc = function() {
-  insertNewLineAfter(1);
-  defaultCaret.show();
-}
+var page0;
 
 $(document).ready(function() {
   console.log('READY');
  
-  initNewDoc();
+  page0 = initNewPage('code_editor');
 
-  $(document).on('keydown', function(event) {
-    // prevent TAB KEY from switching focus
-    if(event.keyCode == 9) event.preventDefault();
-    
-    // detect capslock
-    if (event.originalEvent.getModifierState("CapsLock")) capsLockKey.press();
-    else capsLockKey.release();
-    
-    // handle key pressed
-    handleKeyDown(event.keyCode);
-  });
-
-  $(document).on('keyup', function(event) {
-    handleKeyUp(event.keyCode);
-  });
+  window.onresize = function() {
+    page0.setWidth(window.innerWidth);
+    page0.setHeight(window.innerHeight);
+    // page0.defaultCaret.show();
+  }
 });

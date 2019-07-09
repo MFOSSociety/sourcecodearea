@@ -1,18 +1,18 @@
-function Line(lineNum) {
+function Line(page, lineNum) {
+  this.page = page;
   this.lineNum = lineNum;
-  this.colorState = [];
 }
 
 Line.prototype = {
   constructor: Line,
 
   getCode: function() { 
-    return readLineText(this.lineNum); 
+    return this.page.readLineText(this.lineNum); 
   },
   
   setCode: function(text) {
-    let html = colorizeLine(text, null);
-    setLineHTML(this.lineNum, html);
+    let html = colorizeLine(this.page, text, null);
+    this.page.setLineHTML(this.lineNum, html);
   },
 
   getHTML: function() {
@@ -27,16 +27,22 @@ Line.prototype = {
 
   setLineNum: function(num) {
     this.lineNum = num;
-    let el = document.getElementsByClassName("linenum")[this.lineNum-1];
-    el.textContent = this.lineNum;
+    let el = $(`#${this.page.getId()} .line:nth-child(${this.lineNum}) .linenum`);
+    $(el).html(num);
   },
   getLineNum: function() {
     return this.lineNum;
-  }
+  },
 
-  // TODO
-  /*
-    init colorState[]
-  */
+  getIndentationSize: function() {
+    let code = this.getCode();
+    let len = 0;
+    
+    // WORKAROUND
+    // HTML stores (char)32 as (char)160
+    const whitespace = String.fromCharCode(160);
+    for(let i=0;i<code.length && code.charAt(i)==whitespace;i++) len++;
+    return len;
+  }
 }
 

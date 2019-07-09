@@ -8,15 +8,22 @@ const getColorClass = function(word) {
 }
 
 const isNumber = function(str) {
-  return !isNaN(str);
+  let flag = false;
+  for(let i=0;i<str.length;i++) {
+    let c = str.charCodeAt(i);
+    if(c<48 || c>57) return false;
+    flag = true;
+  }
+  return flag;
 }
 
-const characterizeWord = function(word) {
+const characterizeString = function(page, word) {
   let html = "";
   for(let i = 0; i < word.length; i++) {
     let char = word.charAt(i);
+    if(char.charCodeAt(0) == 160) char = ' ';
     if(char == '\t') {
-      for(let i = 0; i<tabSize; i++) html += characterPrefix + '&nbsp;' + characterSuffix;
+      for(let i = 0; i<page.tabSize; i++) html += characterPrefix + '&nbsp;' + characterSuffix;
     } else {
       if(char == ' ') char = '&nbsp;';
       html += characterPrefix + char + characterSuffix;
@@ -26,22 +33,21 @@ const characterizeWord = function(word) {
   return html;
 }
 
-const  wordToHTML = function(word) {
-  let htmlWord = word.length==0 ? '' : characterizeWord(word);
+const  colorizeWord = function(page, word) {
+  let htmlWord = word.length==0 ? '' : characterizeString(page, word);
   
   if(isNumber(word)) {
-    htmlWord = valuePrefix + htmlWord + valueSuffix;
+    htmlWord = `<div class="${valueColor}">` + htmlWord + '</div>';
   } else {
-    let p = colorMap[word];
-    if(p != undefined) {
-      htmlWord = p.prefix + htmlWord + p.suffix;
+    let color = colorMap[word];
+    if(color !== undefined) {
+      htmlWord = `<div class="${color.className}">` + htmlWord + '</div>';
     }
   }
   return htmlWord;
 }
 
-const colorizeLine = function(text, prevColorStateList) {
-  // TODO handle multiple line coloring
+const colorizeString = function(page, text) {
   let htmlLine = "";
   let char, word="";
   
@@ -57,16 +63,34 @@ const colorizeLine = function(text, prevColorStateList) {
       
       // WORKAROUND
       // coz HTML handles spaces differently
-      htmlLine += wordToHTML(word);
-      htmlLine += characterizeWord(char);
+      htmlLine += colorizeWord(page, word);
+      htmlLine += characterizeString(page, char);
       word = "";
     } else if(i == text.length-1) {
       word = word + char;
-      htmlLine += wordToHTML(word);
+      htmlLine += colorizeWord(page, word);
     } else {
       word = word + char;
     }
   }
   return htmlLine;
+}
+
+const colorizeLine = function(page, text) {
+  // TODO handle multiple line coloring
+  let html = '';
+  let slCommentIndex = text.indexOf('//');
+
+  if(slCommentIndex != -1) {
+    let prefix = text.substring(0, slCommentIndex);
+    let suffix = characterizeString(page, text.substring(slCommentIndex));
+
+    html = colorizeString(page, prefix) + `<div class="${getColorClass(singleLineCommentKey).className}">` + suffix + '</div>';
+  } else {
+    html = colorizeString(page, text);
+  }
+
+  return html;
+
 }
 

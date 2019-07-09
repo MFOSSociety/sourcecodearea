@@ -3,27 +3,7 @@ body {
   padding: 0;
   width: 100%;
   height: 100%;
-  overflow: hidden;
-}
-
-#page {
-  position: relative;
-  top: 0px;
-  left: 0px;
-  width: 100%;
-  height: 100%;
-  
   overflow: auto;
-  z-index: 0;
-}
-
-.caret {
-  position: absolute;
-  height: 2.6vh;
-  left: 1px;
-  border-right: 1px solid black;
-
-  transition: 0.07s;
 }
 
 .line {
@@ -32,18 +12,21 @@ body {
   left: 0px;
   width: calc(100% - 10px);
   min-height: 2vh;
+  height: 2vh;
+  max-height: 2vh;
   
   font-size: 2vh;
   padding: 2px 5px;
-
   z-index: 2;
 }
 .line .linenum {
   display: inline-block;
+  min-height: 2vh;
 }
 .line .code {
   display: inline-block;
   margin: 0px 5px;
+  min-height: 2vh;
 }
 
 .character {
@@ -59,5 +42,9 @@ body {
 }
 .value {
   color: red;
+  display: inline-block;
+}
+.comment {
+  color: green;
   display: inline-block;
 }

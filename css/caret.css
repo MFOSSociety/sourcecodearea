@@ -1,0 +1,9 @@
+.caret {
+  position: absolute;
+  height: 2.6vh;
+  left: 1px;
+  border-right: 1px solid black;
+
+  transition: 0.07s;
+  z-index: 0;
+}
