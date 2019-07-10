@@ -1,0 +1,12 @@
+#code_editor {
+  background-color: gainsboro;
+  width: 240px;
+  height: 800px;
+}
+.line {
+  height: auto;
+}
+
+.curLine {
+  background-color: azure;
+}

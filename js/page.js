@@ -87,14 +87,14 @@ Page.prototype = {
   }
 }
 
-const initNewPage = function(id) {
-  let page = new Page(id, window.innerWidth, window.innerHeight);
+const initNewPage = function(id, width, height) {
+  let page = new Page(id, width, height);
   page.insertNewLineAfter(1);
   page.defaultCaret.show();
 
   $(document).on('keydown', function(event) {
-    // prevent TAB KEY from switching focus
-    if(event.keyCode == 9) event.preventDefault();
+    if(preventDefaultKeyList.includes(event.keyCode))
+      event.preventDefault();
     
     // toggle capslock
     if (event.originalEvent.getModifierState("CapsLock")) capsLockKey.press();

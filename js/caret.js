@@ -31,6 +31,22 @@ Caret.prototype = {
     // caretElement = $(caretElement)[0];
     $(caretElement).css('top', `${top}px`);
     $(caretElement).css('left', `${left}px`);
+
+    // toggle style
+    let lineEl = $(".curLine");
+    $(lineEl).removeClass("curLine");
+    lineEl = $(`.line:nth-child(${this.row})`);
+    $(lineEl).addClass("curLine");
+
+    /* TODO fix line height expand on char-overflow
+    if ($(lineEl)[0].scrollWidth >  $(lineEl).innerWidth()) {
+      console.log('overflow: '+this.row)
+      let charCount = this.page.getLineRef(this.row).getCode().length
+      let charWidth = $('.character:nth-child(1)').width()
+      let charPerLine = this.page.width / charWidth
+      console.log(charPerLine)    
+    }
+    */
   },
 
   getCharacterElementBefore: function() {

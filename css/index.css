@@ -17,7 +17,7 @@ body {
   
   font-size: 2vh;
   padding: 2px 5px;
-  z-index: 2;
+  z-index: 1;
 }
 .line .linenum {
   display: inline-block;
