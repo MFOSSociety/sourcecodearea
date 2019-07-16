@@ -29,7 +29,7 @@ Caret.prototype = {
     if(this.col == 1 || el == undefined) left = $(`#${this.page.getId()} .line:nth-child(${this.row}) .linenum`).width() + 10;
     else left = $(el).position().left + $(el).width() + 16;
     if(this.col !==1 && el !== undefined)
-    console.log('>>>'+this.row + ' ' + top + ' '+left);
+    console.log(top, left)
 
     $(caretElement).css('top', `${top}px`);
     $(caretElement).css('left', `${left}px`);
@@ -213,8 +213,8 @@ Caret.prototype = {
     let end = line.getCode().length + 1;
     if(end == this.col) { // if caret is at end, jump to next line
       newRow = this.row + 1;
-      if(newRow > lineRef.length) { // if caret is at end of file
-        newRow = lineRef.length;
+      if(newRow > this.page.lineRef.length) { // if caret is at end of file
+        newRow = this.page.lineRef.length;
         newCol = this.col;
       } else {
         newCol = 1;
@@ -223,7 +223,6 @@ Caret.prototype = {
       newRow = this.row;
       newCol = this.col + 1;
     }
-
     this.setPos(newRow, newCol);
   }
 }
