@@ -10,22 +10,3 @@ Clone the repo and open index.html... and start typing.
 ## Maintainers
 The project is maintained by :
 - Shikhar Vaish ([svr8](https://github.com/svr8))
-
----
-
-## Developers
-<table>
-<tr>
-<td>
-     <img src="https://avatars1.githubusercontent.com/u/10533612?s=460&v=4" />
-
-           Shikhar Vaish
-
-<p align="center">
-<a href = "https://github.com/svr8"><img src = "http://www.iconninja.com/files/241/825/211/round-collaboration-social-github-code-circle-network-icon.svg" width="36" height = "36"/></a>
-<a href = "https://twitter.com/Shikhar_VaishR8"><img src = "https://www.shareicon.net/download/2016/07/06/107115_media.svg" width="36" height="36"/></a>
-<a href = "https://linkedin.com/in/shikhar-vaish/"><img src = "http://www.iconninja.com/files/863/607/751/network-linkedin-social-connection-circular-circle-media-icon.svg" width="36" height="36"/></a>
-</p>
-</td>
-</tr>
-  </table>
