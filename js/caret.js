@@ -25,28 +25,34 @@ Caret.prototype = {
     let top, left;
     if(this.row == 1) top = 0;
     else top = $(`#${this.page.getId()} .line:nth-child(${this.row})`).position().top;
+    
     if(this.col == 1 || el == undefined) left = $(`#${this.page.getId()} .line:nth-child(${this.row}) .linenum`).width() + 10;
-    else left = $(el).position().left + $(el).width();
+    else left = $(el).position().left + $(el).width() + 16;
+    if(this.col !==1 && el !== undefined)
+    console.log('>>>'+this.row + ' ' + top + ' '+left);
 
-    // caretElement = $(caretElement)[0];
     $(caretElement).css('top', `${top}px`);
     $(caretElement).css('left', `${left}px`);
 
-    // toggle style
+    // toggle current line background color
     let lineEl = $(".curLine");
     $(lineEl).removeClass("curLine");
     lineEl = $(`.line:nth-child(${this.row})`);
     $(lineEl).addClass("curLine");
 
-    /* TODO fix line height expand on char-overflow
-    if ($(lineEl)[0].scrollWidth >  $(lineEl).innerWidth()) {
-      console.log('overflow: '+this.row)
-      let charCount = this.page.getLineRef(this.row).getCode().length
-      let charWidth = $('.character:nth-child(1)').width()
-      let charPerLine = this.page.width / charWidth
-      console.log(charPerLine)    
-    }
-    */
+    // detect text overflow
+    // TODO Enable word-wrap
+    // lineEl = $(`#${this.page.getId()} .line:nth-child(${this.row})`)
+    // let linenumEl = $(`#${this.page.getId()} .line:nth-child(${this.row}) .linenum`);
+    // let linecodeEl = $(`#${this.page.getId()} .line:nth-child(${this.row}) .code`);
+
+    // if($(lineEl).width() < $(linenumEl).width() + $(linecodeEl).width()) {
+    //   console.log('OVERFLOW')
+      
+
+    // } else {
+    //   console.log('NO OVERFLOW');
+    // }
   },
 
   getCharacterElementBefore: function() {

@@ -14,4 +14,10 @@ const charMap = {
   '[': ']',
   "'": "'",
   '"': '"'
-}
+};
+
+var config = {
+  lineHeight: 13,
+  linenumHeight: 14,
+  linecodeHeight: 15,
+};

@@ -1,12 +1,31 @@
 #code_editor {
-  background-color: gainsboro;
-  width: 240px;
-  height: 800px;
+  background-color: rgb(39, 39, 39);
+  width: 800px;
+  height: 400px;
+  overflow: auto;
 }
 .line {
-  height: auto;
+}
+.linenum {
+  color: whitesmoke;
+}
+.code {
+  /* background-color: blanchedalmond; */
+  color: white;
 }
 
 .curLine {
-  background-color: azure;
+  background-color: rgb(78, 78, 78);
+}
+.keyword {
+  color: rgb(20, 181, 255);
+  display: inline-block;
+}
+.value {
+  color: rgb(253, 2, 136);
+  display: inline-block;
+}
+.comment {
+  color: green;
+  display: inline-block;
 }
