@@ -1,13 +1,11 @@
-var page0;
 
 $(document).ready(function() {
   console.log('READY');
  
-  page0 = initNewPage('code_editor');
+  var page0 = initNewPage('code_editor', window.innerWidth, window.innerHeight);
 
   window.onresize = function() {
     page0.setWidth(window.innerWidth);
     page0.setHeight(window.innerHeight);
-    // page0.defaultCaret.show();
   }
 });

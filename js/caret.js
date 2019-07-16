@@ -25,12 +25,34 @@ Caret.prototype = {
     let top, left;
     if(this.row == 1) top = 0;
     else top = $(`#${this.page.getId()} .line:nth-child(${this.row})`).position().top;
+    
     if(this.col == 1 || el == undefined) left = $(`#${this.page.getId()} .line:nth-child(${this.row}) .linenum`).width() + 10;
-    else left = $(el).position().left + $(el).width();
+    else left = $(el).position().left + $(el).width() + 16;
+    if(this.col !==1 && el !== undefined)
+    console.log(top, left)
 
-    // caretElement = $(caretElement)[0];
     $(caretElement).css('top', `${top}px`);
     $(caretElement).css('left', `${left}px`);
+
+    // toggle current line background color
+    let lineEl = $(".curLine");
+    $(lineEl).removeClass("curLine");
+    lineEl = $(`.line:nth-child(${this.row})`);
+    $(lineEl).addClass("curLine");
+
+    // TODO Enable word-wrap
+    // detect text overflow
+    // lineEl = $(`#${this.page.getId()} .line:nth-child(${this.row})`)
+    // let linenumEl = $(`#${this.page.getId()} .line:nth-child(${this.row}) .linenum`);
+    // let linecodeEl = $(`#${this.page.getId()} .line:nth-child(${this.row}) .code`);
+
+    // if($(lineEl).width() < $(linenumEl).width() + $(linecodeEl).width()) {
+    //   console.log('OVERFLOW')
+      
+
+    // } else {
+    //   console.log('NO OVERFLOW');
+    // }
   },
 
   getCharacterElementBefore: function() {
@@ -191,8 +213,8 @@ Caret.prototype = {
     let end = line.getCode().length + 1;
     if(end == this.col) { // if caret is at end, jump to next line
       newRow = this.row + 1;
-      if(newRow > lineRef.length) { // if caret is at end of file
-        newRow = lineRef.length;
+      if(newRow > this.page.lineRef.length) { // if caret is at end of file
+        newRow = this.page.lineRef.length;
         newCol = this.col;
       } else {
         newCol = 1;
@@ -201,7 +223,6 @@ Caret.prototype = {
       newRow = this.row;
       newCol = this.col + 1;
     }
-
     this.setPos(newRow, newCol);
   }
 }

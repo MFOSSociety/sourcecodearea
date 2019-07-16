@@ -84,7 +84,6 @@ const colorizeLine = function(page, text) {
   if(slCommentIndex != -1) {
     let prefix = text.substring(0, slCommentIndex);
     let suffix = characterizeString(page, text.substring(slCommentIndex));
-
     html = colorizeString(page, prefix) + `<div class="${getColorClass(singleLineCommentKey).className}">` + suffix + '</div>';
   } else {
     html = colorizeString(page, text);

@@ -2,7 +2,6 @@ const keywordColor = 'keyword';
 const valueColor = 'value';
 const commentColor = 'comment';
 
-
 var colorMap = {
   'abstract': { className: keywordColor },
   'assert': { className: keywordColor },
@@ -58,8 +57,6 @@ var colorMap = {
   'true':{ className: valueColor, },
   'false': { className: valueColor, },
   'null': { className: valueColor, },
-
-  // '//': { className: commentColor }
 };
 
 const singleLineCommentKey = '//';
