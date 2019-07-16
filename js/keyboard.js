@@ -35,6 +35,14 @@ Key.prototype = {
 // const isAlphaNumericKey = function(keyCode) {
 //   return isAlphabetKey(keyCode) || isNumericKey(keyCode);
 // }
+
+// CharMap --------------------------------------------------------------------
+/*
+  CharMap Keys are pair-strings that are related to each other for the editor.
+  For example:
+    all enclosing literals are handled diffrently by the editor:
+    [], {}, (), '', ""
+*/
 const isCharMapKey = function(char) {
   return charMap[char] !== undefined;
 }
@@ -50,10 +58,27 @@ const isCharMapValue = function(char) {
 const getCharMapValue = function(char) {
   return charMap[char];
 }
+
+/*
+  Ignore Keys are keys that need not be handled by the editor.
+  More like "do nothing when these keys are pressed".
+
+  @param {keyCode} code of keyboard key
+  @return {boolean} true if it is a "IGNORE KEY", otherwise false
+*/
 const isIgnoreKey = function(keyCode) {
   return ignoreKeyList.includes(keyCode);
 }
 
+/*
+  keyToChar accepts keyCode of key on keyboard and
+  returns the expected character.
+  It also handles shift and capslock keys.
+  // TODO handle alt key
+
+  @param {keyCode} code of keyboard key
+  @return expected character mapped to the keyboard
+*/
 const keyToChar = function(keyCode) {
   let char;
   if(shiftKey.isPressed() || capsLockKey.isPressed()) {
