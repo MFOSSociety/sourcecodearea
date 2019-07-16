@@ -1,3 +1,11 @@
+/*
+  Page represents the entire visual space of a code editor.
+  It wraps up linenumbers, line content, carets.
+
+  @param {id} unique id provided to the editor in the DOM
+  @param {width} default width of the editor
+  @param {height} default height of the editor
+*/
 function Page(id, width, height) {
   this.id = id;
   this.width = width;
@@ -17,10 +25,10 @@ Page.prototype = {
     this.defaultCaret = new Caret(this, 0,1,1);
   },
 
+  // Getter, Setter Methods ------------------------------------------------------------------
   getId: function() {
     return this.id;
   },
-
   getWidth: function() { 
     return this.width;
   },
@@ -36,21 +44,49 @@ Page.prototype = {
     this.defaultCaret.setPos(this.defaultCaret.getRow(), this.defaultCaret.getCol());
   },
 
+  // Line Methods ------------------------------------------------------------------
+  /*
+    Reference to every line is stored in the array lineRef.
+    The order is same as it is displayed on the DOM.
+    
+    @param {lineNum} line number
+    @return line object to the corresponding @lineNum
+  */
   getLineRef: function(lineNum) {
     return this.lineRef[lineNum-1];
   },
 
+  /*
+    readLineText reads the code written on specified line and returns plain text string.
+    
+    @param {lineNum} line number
+    @return string content on the line @lineNum
+  */
   readLineText: function(lineNum) {
     let el = document.getElementById(`${this.id}`).getElementsByClassName("code")[lineNum-1];
     if(el == undefined) return undefined;
     return el.textContent;  
   },
 
+  /*
+    setLineHTML sets the html content on the specified line in the DOM.
+    
+    @param {lineNum} line number of the line to change
+    @param {html} html content to insert
+  */
   setLineHTML: function(lineNum, html) {
     let el = $(`#${this.id}`)[0].getElementsByClassName("code")[lineNum-1];
     el.innerHTML = html;
   },
 
+  /*
+    insertNewLineAfter 
+      inserts new line after the specified line number,
+      increases the line numbers of the following line numbers by 1,
+      updates lineRef array accordingly.
+
+    @param {lineNum} line number
+  */
   insertNewLineAfter: function(lineNum) {
     // check if line number has exceeded number of lines on page
     let lineExceed = lineNum > this.lineRef.length;
@@ -77,6 +113,13 @@ Page.prototype = {
     }
   },
 
+  /*
+    deleteLine
+      deletes the line in the DOM,
+      updates array lineRef accordingly.
+    
+    @param {lineNum} line number
+  */
   deleteLine: function(lineNum) {
     if(lineNum > this.lineRef.length) return;
     $(`#${this.id} .line:nth-child(${lineNum})`).remove();
@@ -87,11 +130,22 @@ Page.prototype = {
   }
 }
 
+/*
+  initNewPage creates the code editor in DOM with required attributes.
+  It provides for the basic functions that a user expects from an empty code editor.
+  Keyboard, Mouse Event handlers are also attached to the editor.
+
+  @param {id} unique id provided to the editor in the DOM
+  @param {width} default width of the editor
+  @param {height} default height of the editor
+  @return page object refering to the @id in DOM.
+*/
 const initNewPage = function(id, width, height) {
   let page = new Page(id, width, height);
   page.insertNewLineAfter(1);
   page.defaultCaret.show();
 
+  // Keyboard event handler
   $(document).on('keydown', function(event) {
     if(preventDefaultKeyList.includes(event.keyCode))
       event.preventDefault();
@@ -116,6 +170,7 @@ const initNewPage = function(id, width, height) {
   //   handleKeyUp(page, event.keyCode);
   // });
 
+  // TODO add mouse event handler
   return page;
 }
 

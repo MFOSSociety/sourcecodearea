@@ -4,13 +4,10 @@
   height: 400px;
   overflow: auto;
 }
-.line {
-}
 .linenum {
   color: whitesmoke;
 }
 .code {
-  /* background-color: blanchedalmond; */
   color: white;
 }
 

@@ -40,8 +40,8 @@ Caret.prototype = {
     lineEl = $(`.line:nth-child(${this.row})`);
     $(lineEl).addClass("curLine");
 
-    // detect text overflow
     // TODO Enable word-wrap
+    // detect text overflow
     // lineEl = $(`#${this.page.getId()} .line:nth-child(${this.row})`)
     // let linenumEl = $(`#${this.page.getId()} .line:nth-child(${this.row}) .linenum`);
     // let linecodeEl = $(`#${this.page.getId()} .line:nth-child(${this.row}) .code`);
