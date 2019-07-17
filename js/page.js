@@ -33,14 +33,14 @@ Page.prototype = {
     return this.width;
   },
   setWidth: function(width) {
-    document.getElementById(`${this.id}`).style.width = `${width}px`;
+    $(`#${this.id}`).css('width', `${width}px`);
     this.defaultCaret.setPos(this.defaultCaret.getRow(), this.defaultCaret.getCol());
   },
   getHeight: function() {
     return this.height;
   },
   setHeight: function(height) {
-    document.getElementById(`${this.id}`).style.height = `${height}`;
+    $(`#${this.id}`).css('height', `${height}px`);
     this.defaultCaret.setPos(this.defaultCaret.getRow(), this.defaultCaret.getCol());
   },
 
@@ -104,13 +104,17 @@ Page.prototype = {
       let el = document.getElementsByClassName("line")[lineNum-1];
       el.insertAdjacentHTML('afterEnd', html);    
     }
-    
+   
     // update lineRef
     this.lineRef.splice(newLine.getLineNum()-1, 0, newLine);
     for(let l = newLineNum; l < this.lineRef.length; l++) {
       console.log(this.lineRef[l].getLineNum());
       this.lineRef[l].setLineNum(this.lineRef[l].getLineNum()+1);
     }
+
+
+    // let linecodeEl = $(`.line:nth-child(${newLineNum}) .code`);
+    // $(linecodeEl).width( this.width - $(linecodeEl).position().left - 8);
   },
 
   /*
@@ -142,10 +146,8 @@ Page.prototype = {
 */
 const initNewPage = function(id, width, height) {
   let page = new Page(id, width, height);
-  page.insertNewLineAfter(1);
-  page.defaultCaret.show();
 
-  // Keyboard event handler
+  // Keyboard event handlers
   $(document).on('keydown', function(event) {
     if(preventDefaultKeyList.includes(event.keyCode))
       event.preventDefault();
@@ -170,7 +172,20 @@ const initNewPage = function(id, width, height) {
   //   handleKeyUp(page, event.keyCode);
   // });
 
-  // TODO add mouse event handler
+  // TODO add mouse event handlers
+
+  page.insertNewLineAfter(1);
+  page.defaultCaret.show();
+
+  // Style adjustments
+  page.setWidth(width);
+  page.setHeight(height);
+
+  let linecodeEl = $(`.line:nth-child(1) .code`);
+  let linecodeHeight = $(linecodeEl).height();
+  config.linecodeHeight = linecodeHeight;
+  
+
   return page;
 }
 
