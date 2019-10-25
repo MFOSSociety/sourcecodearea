@@ -119,7 +119,7 @@ Page.prototype = {
 
   /*
     deleteLine
-      deletes the line in the DOM,
+      deletes the line in the DOM and
       updates array lineRef accordingly.
     
     @param {lineNum} line number
@@ -146,20 +146,33 @@ Page.prototype = {
 */
 const initNewPage = function(id, width, height) {
   let page = new Page(id, width, height);
-
+  
+  page.insertNewLineAfter(1);
+  page.defaultCaret.show();
+  
+  // Style adjustments
+  page.setWidth(width);
+  page.setHeight(height);
+  
+  let linecodeEl = $(`.line:nth-child(1) .code`);
+  let linecodeHeight = $(linecodeEl).height();
+  config.linecodeHeight = linecodeHeight;
+  
   // Keyboard event handlers
-  $(document).on('keydown', function(event) {
+  $(`#${id}`).focus();
+  $(`#${id}`).on('keydown', function(event) {
+    console.log('coo')
     if(preventDefaultKeyList.includes(event.keyCode))
-      event.preventDefault();
+    event.preventDefault();
     
     // toggle capslock
     if (event.originalEvent.getModifierState("CapsLock")) capsLockKey.press();
     else capsLockKey.release();
-
+    
     // toggle shiftkey
     if(event.shiftKey) shiftKey.press();
     else shiftKey.release();
-
+    
     // toggle ctrlKey
     if(event.ctrlKey) ctrlKey.press();
     else ctrlKey.release();
@@ -167,25 +180,8 @@ const initNewPage = function(id, width, height) {
     // handle key pressed
     handleKeyDown(page, event.keyCode);
   });
-
-  // $(document).on('keyup', function(event) {
-  //   handleKeyUp(page, event.keyCode);
-  // });
-
   // TODO add mouse event handlers
-
-  page.insertNewLineAfter(1);
-  page.defaultCaret.show();
-
-  // Style adjustments
-  page.setWidth(width);
-  page.setHeight(height);
-
-  let linecodeEl = $(`.line:nth-child(1) .code`);
-  let linecodeHeight = $(linecodeEl).height();
-  config.linecodeHeight = linecodeHeight;
   
-
   return page;
 }
 

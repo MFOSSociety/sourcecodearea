@@ -24,8 +24,8 @@ Caret.prototype = {
     let lineEl, linenumEl, linecodeEl;
 
     let top, left;
-    if(this.row == 1) top = 0;
-    else top = $(`#${this.page.getId()} .line:nth-child(${this.row})`).position().top;
+    if(this.row == 1) top = 1.5;
+    else top = $(`#${this.page.getId()} .line:nth-child(${this.row})`).position().top + 1.5;
     
     linenumEl = $(`#${this.page.getId()} .line:nth-child(${this.row}) .linenum`);
     if(this.col == 1 || el == undefined) left = $(`#${this.page.getId()} .line:nth-child(${this.row}) .linenum`).width() + 10;
