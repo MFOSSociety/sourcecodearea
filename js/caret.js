@@ -33,7 +33,6 @@ Caret.prototype = {
     // if(this.col !==1 && el !== undefined)
     // console.log(top, left)
 
-    console.log(top);
     $(caretElement).css('top', `${top}px`);
     $(caretElement).css('left', `${left}px`);
 
@@ -57,12 +56,12 @@ Caret.prototype = {
       let isOverflow = charCount*charWidth > linecodeWidth;
       
       if(isOverflow) {
-        console.log('OVERFLOW');
+        // console.log('OVERFLOW');
         // let linecodeHeight = config.linecodeHeight;
         // let increase 
         // $(linecodeEl).height(linecodeHeight*2);
       } else {
-        console.log('NO OVERFLOW');
+        // console.log('NO OVERFLOW');
       }
     }
 

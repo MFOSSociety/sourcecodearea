@@ -36,7 +36,6 @@ function Page(id, width, height) {
   // Keyboard event handlers
   $(`#${id}`).focus();
   $(`#${id}`).on('keydown', function(event) {
-    console.log('coo')
     if(preventDefaultKeyList.includes(event.keyCode))
     event.preventDefault();
     
@@ -57,6 +56,29 @@ function Page(id, width, height) {
   });
 
   // TODO add mouse event handlers  
+  $(document).on('mousedown', '.character', function(event) {
+    let el = $(this);
+
+    // get character attributes on page
+    let character_pos = el.offset();
+    let character_width = el.width();
+
+    // get character index on clicked line
+    let character_index = el.index() + 1;
+
+    // calculate line index of clicked character
+    while( el.attr('class').indexOf('line') == -1 )
+      el = el.parent();
+    let line_num = el.index() + 1;
+
+    // calculate target character index on clicked line
+    if(event.pageX > character_pos.left + (character_width/2) )
+      character_index++;
+
+    // set caret position
+    _this.defaultCaret.setPos(line_num, character_index);
+  });
+
 }
 
 Page.prototype = {
