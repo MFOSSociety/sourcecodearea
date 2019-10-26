@@ -13,6 +13,50 @@ function Page(id, width, height) {
   this.lineRef = [];
   this.tabSize = 4;
   this.defaultCaret = new Caret(this, 0,1,1);
+
+  this.config = {
+    lineHeight: 13,
+    linenumHeight: 14,
+    linecodeHeight: 15,
+  };
+
+  let _this = this;
+
+  this.insertNewLineAfter(1);
+  this.defaultCaret.show();
+  
+  // Style adjustments
+  this.setWidth(width);
+  this.setHeight(height);
+  
+  let linecodeEl = $(`.line:nth-child(1) .code`);
+  let linecodeHeight = $(linecodeEl).height();
+  this.config.linecodeHeight = linecodeHeight;
+  
+  // Keyboard event handlers
+  $(`#${id}`).focus();
+  $(`#${id}`).on('keydown', function(event) {
+    console.log('coo')
+    if(preventDefaultKeyList.includes(event.keyCode))
+    event.preventDefault();
+    
+    // toggle capslock
+    if (event.originalEvent.getModifierState("CapsLock")) capsLockKey.press();
+    else capsLockKey.release();
+    
+    // toggle shiftkey
+    if(event.shiftKey) shiftKey.press();
+    else shiftKey.release();
+    
+    // toggle ctrlKey
+    if(event.ctrlKey) ctrlKey.press();
+    else ctrlKey.release();
+    
+    // handle key pressed
+    handleKeyDown(_this, event.keyCode);
+  });
+
+  // TODO add mouse event handlers  
 }
 
 Page.prototype = {
@@ -133,56 +177,3 @@ Page.prototype = {
       this.lineRef[i].setLineNum(this.lineRef[i].getLineNum()-1);
   }
 }
-
-/*
-  initNewPage creates the code editor in DOM with required attributes.
-  It provides for the basic functions that a user expects from an empty code editor.
-  Keyboard, Mouse Event handlers are also attached to the editor.
-
-  @param {id} unique id provided to the editor in the DOM
-  @param {width} default width of the editor
-  @param {height} default height of the editor
-  @return page object refering to the @id in DOM.
-*/
-const initNewPage = function(id, width, height) {
-  let page = new Page(id, width, height);
-  
-  page.insertNewLineAfter(1);
-  page.defaultCaret.show();
-  
-  // Style adjustments
-  page.setWidth(width);
-  page.setHeight(height);
-  
-  let linecodeEl = $(`.line:nth-child(1) .code`);
-  let linecodeHeight = $(linecodeEl).height();
-  config.linecodeHeight = linecodeHeight;
-  
-  // Keyboard event handlers
-  $(`#${id}`).focus();
-  $(`#${id}`).on('keydown', function(event) {
-    console.log('coo')
-    if(preventDefaultKeyList.includes(event.keyCode))
-    event.preventDefault();
-    
-    // toggle capslock
-    if (event.originalEvent.getModifierState("CapsLock")) capsLockKey.press();
-    else capsLockKey.release();
-    
-    // toggle shiftkey
-    if(event.shiftKey) shiftKey.press();
-    else shiftKey.release();
-    
-    // toggle ctrlKey
-    if(event.ctrlKey) ctrlKey.press();
-    else ctrlKey.release();
-    
-    // handle key pressed
-    handleKeyDown(page, event.keyCode);
-  });
-  // TODO add mouse event handlers
-  
-  return page;
-}
-
-

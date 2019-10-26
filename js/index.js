@@ -2,7 +2,8 @@
 $(document).ready(function() {
   console.log('READY');
   
-  var page0 = initNewPage('code_editor', window.innerWidth, window.innerHeight);
+  // var page0 = initNewPage('code_editor', window.innerWidth, window.innerHeight);
+  var page0 = new Page('code_editor', window.innerWidth, window.innerHeight);
 
   window.onresize = function() {
     page0.setWidth(window.innerWidth);
