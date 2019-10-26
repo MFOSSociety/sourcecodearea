@@ -1,11 +1,14 @@
 #code_editor {
   background-color: rgb(39, 39, 39);
-  width: 800px;
-  height: 400px;
-  overflow: auto;
+  overflow-y: auto;
+  /* overflow-x: hidden; */
+}
+.caret {
+  transition: 0.06s;
 }
 .linenum {
   color: whitesmoke;
+  width: 40px;
 }
 .code {
   color: white;
@@ -19,10 +22,10 @@
   display: inline-block;
 }
 .value {
-  color: rgb(253, 2, 136);
+  color: rgb(253, 136, 2);
   display: inline-block;
 }
 .comment {
-  color: green;
+  color: rgb(7, 212, 7);
   display: inline-block;
 }

@@ -7,6 +7,9 @@ const altKey = new Key(18);
 const capsLockKey = new Key(20);
 const ignoreKeyList = [16, 17, 18];
 const preventDefaultKeyList = [9, 32];
+const mouseLeft = new Key(1);
+const mouseMiddle = new Key(2);
+const mouseRight = new Key(3);
 
 const charMap = {
   '(': ')',
@@ -14,10 +17,4 @@ const charMap = {
   '[': ']',
   "'": "'",
   '"': '"'
-};
-
-var config = {
-  lineHeight: 13,
-  linenumHeight: 14,
-  linecodeHeight: 15,
 };

@@ -92,7 +92,7 @@ const keyToChar = function(keyCode) {
 // --------------------------------------------------------------------------
 // KEYDOWN
 const handleKeyDown = function(page, keyCode) {
-  var tmpkey = String.fromCharCode(keyCode);
+  // var tmpkey = String.fromCharCode(keyCode);
   // console.log(tmpkey + ' ' + keyCode);
 
   // Ignore Keys --------------------------------------------------------------------

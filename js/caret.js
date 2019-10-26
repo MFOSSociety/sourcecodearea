@@ -21,34 +21,57 @@ Caret.prototype = {
     
     let el = this.getCharacterElementBefore();
     let caretElement = $(`#caret_${this.page.getId()}_${this.id}`);
+    let lineEl, linenumEl, linecodeEl;
 
     let top, left;
-    if(this.row == 1) top = 0;
-    else top = $(`#${this.page.getId()} .line:nth-child(${this.row})`).position().top;
+    if(this.row == 1) top = 1.5;
+    else top = $(`#${this.page.getId()} .line:nth-child(${this.row})`).position().top + 1.5;
     
+    linenumEl = $(`#${this.page.getId()} .line:nth-child(${this.row}) .linenum`);
     if(this.col == 1 || el == undefined) left = $(`#${this.page.getId()} .line:nth-child(${this.row}) .linenum`).width() + 10;
-    else left = $(el).position().left + $(el).width() + 16;
-    if(this.col !==1 && el !== undefined)
-    console.log(top, left)
+    else left = $(el).position().left + $(el).width() + $(linenumEl).width() + 10;
+    // if(this.col !==1 && el !== undefined)
+    // console.log(top, left)
 
     $(caretElement).css('top', `${top}px`);
     $(caretElement).css('left', `${left}px`);
 
     // toggle current line background color
-    let lineEl = $(".curLine");
+    lineEl = $(".curLine");
     $(lineEl).removeClass("curLine");
     lineEl = $(`.line:nth-child(${this.row})`);
     $(lineEl).addClass("curLine");
 
     // TODO Enable word-wrap
     // detect text overflow
-    // lineEl = $(`#${this.page.getId()} .line:nth-child(${this.row})`)
-    // let linenumEl = $(`#${this.page.getId()} .line:nth-child(${this.row}) .linenum`);
-    // let linecodeEl = $(`#${this.page.getId()} .line:nth-child(${this.row}) .code`);
+    lineEl = $(`#${this.page.getId()} .line:nth-child(${this.row})`)
+    linenumEl = $(`#${this.page.getId()} .line:nth-child(${this.row}) .linenum`);
+    linecodeEl = $(`#${this.page.getId()} .line:nth-child(${this.row}) .code`);
+    let charEl = $(`#${this.page.getId()} .line:nth-child(${this.row}) .code .character:nth-child(1)`);
+    if(charEl !== undefined) {
+      let linecodeWidth = $(linecodeEl).width();
+      let line = this.page.getLineRef(this.row);
+      let charCount = line.getCode().length;
+      let charWidth = $(charEl).width();
+      let isOverflow = charCount*charWidth > linecodeWidth;
+      
+      if(isOverflow) {
+        // console.log('OVERFLOW');
+        // let linecodeHeight = config.linecodeHeight;
+        // let increase 
+        // $(linecodeEl).height(linecodeHeight*2);
+      } else {
+        // console.log('NO OVERFLOW');
+      }
+    }
 
     // if($(lineEl).width() < $(linenumEl).width() + $(linecodeEl).width()) {
-    //   console.log('OVERFLOW')
-      
+    //   console.log('OVERFLOW');
+    //   // let lineHeight = $(lineEl).height();
+    //   // $(lineEl).height(lineHeight*2);
+    //   // let linecodeHeight = $(linecodeEl).height();
+    //   // $(linecodeEl).height(linecodeHeight*2);
+    //   // console.log(linecodeHeight);
 
     // } else {
     //   console.log('NO OVERFLOW');
@@ -224,5 +247,23 @@ Caret.prototype = {
       newCol = this.col + 1;
     }
     this.setPos(newRow, newCol);
+  },
+
+  moveToCharacterElement: function(charEl) {
+    let charPos = this.page.getCharacterPosition(charEl);    
+    this.setPos(charPos.line, charPos.index);
+  },
+
+  moveToEndOfLine: function(lineEl) {
+    let _this = this;
+
+    let line_num = lineEl.index() + 1;
+    let codeEl = $(`#${_this.page.id} .line:nth-child(${line_num}) > .code`);
+    let codePos = codeEl.offset();
+    let codeEnd = codePos.left + codeEl.width();
+    if(event.pageX > codeEnd) {
+      let line_ref = _this.page.getLineRef(line_num);
+      _this.setPos(line_num, line_ref.getCharCount()+1);
+    }
   }
 }
