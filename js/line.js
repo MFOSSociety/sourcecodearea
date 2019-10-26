@@ -25,6 +25,10 @@ Line.prototype = {
     return linenumHTML + textHTML;
   },
 
+  getCharCount: function() {
+    return this.getCode().length;
+  },
+
   setLineNum: function(num) {
     this.lineNum = num;
     let el = $(`#${this.page.getId()} .line:nth-child(${this.lineNum}) .linenum`);

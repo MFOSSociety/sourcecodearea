@@ -1,6 +1,6 @@
 /*
   Page represents the entire visual space of a code editor.
-  It wraps up linenumbers, line content, carets.
+  It wraps up nenumbers, line content, carets.
 
   @param {id} unique id provided to the editor in the DOM
   @param {width} default width of the editor
@@ -15,6 +15,7 @@ function Page(id, width, height) {
   this.defaultCaret = new Caret(this, 0,1,1);
 
   this.config = {
+    codeElementLeft: 51,
     lineHeight: 13,
     linenumHeight: 14,
     linecodeHeight: 15,
@@ -55,28 +56,54 @@ function Page(id, width, height) {
     handleKeyDown(_this, event.keyCode);
   });
 
-  // TODO add mouse event handlers  
+  // Mouse Event Handlers
+  // On mousedown on character, move caret to this character
   $(document).on('mousedown', '.character', function(event) {
     let el = $(this);
+    let clicked_el = $(this)[0];
 
     // get character attributes on page
     let character_pos = el.offset();
     let character_width = el.width();
 
-    // get character index on clicked line
-    let character_index = el.index() + 1;
-
     // calculate line index of clicked character
     while( el.attr('class').indexOf('line') == -1 )
       el = el.parent();
     let line_num = el.index() + 1;
+    
+    // calculate character index on clicked line
+    let character_index = 0;
+    let character_found = false;
+    $('.character', $(`#${_this.id} .line:nth-child(${line_num})`)).each(function(){
+      if(!character_found)
+        character_index++;
+    
+      if( $(this)[0] == clicked_el )
+        character_found = true;
+    });
 
     // calculate target character index on clicked line
     if(event.pageX > character_pos.left + (character_width/2) )
       character_index++;
 
+    console.log(`${line_num}:${character_index}`)
+
     // set caret position
     _this.defaultCaret.setPos(line_num, character_index);
+  });
+
+  // On mousedown on line(whitespace after code ends), move character 
+  // to end of this line
+  $(document).on('mousedown', '.line', function(event) {
+    let el = $(this);
+    let line_num = el.index() + 1;
+    let codeEl = $(`#${_this.id} .line:nth-child(${line_num}) > .code`);
+    let codePos = codeEl.offset();
+    let codeEnd = codePos.left + codeEl.width();
+    if(event.pageX > codeEnd) {
+      let line_ref = _this.getLineRef(line_num);
+      _this.defaultCaret.setPos(line_num, line_ref.getCharCount()+1);
+    }
   });
 
 }
@@ -174,7 +201,6 @@ Page.prototype = {
     // update lineRef
     this.lineRef.splice(newLine.getLineNum()-1, 0, newLine);
     for(let l = newLineNum; l < this.lineRef.length; l++) {
-      console.log(this.lineRef[l].getLineNum());
       this.lineRef[l].setLineNum(this.lineRef[l].getLineNum()+1);
     }
 
