@@ -247,5 +247,23 @@ Caret.prototype = {
       newCol = this.col + 1;
     }
     this.setPos(newRow, newCol);
+  },
+
+  moveToCharacterElement: function(charEl) {
+    let charPos = this.page.getCharacterPosition(charEl);    
+    this.setPos(charPos.line, charPos.index);
+  },
+
+  moveToEndOfLine: function(lineEl) {
+    let _this = this;
+
+    let line_num = lineEl.index() + 1;
+    let codeEl = $(`#${_this.page.id} .line:nth-child(${line_num}) > .code`);
+    let codePos = codeEl.offset();
+    let codeEnd = codePos.left + codeEl.width();
+    if(event.pageX > codeEnd) {
+      let line_ref = _this.page.getLineRef(line_num);
+      _this.setPos(line_num, line_ref.getCharCount()+1);
+    }
   }
 }
