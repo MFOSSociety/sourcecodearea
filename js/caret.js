@@ -16,11 +16,13 @@ Caret.prototype = {
   },
   
   setPos : function(row, col) {
+    this.resetBlink();
+
     this.row = row;
     this.col = col;
     
     let el = this.getCharacterElementBefore();
-    let caretElement = $(`#caret_${this.page.getId()}_${this.id}`);
+    let caretElement = this.getCarretElement();
     let lineEl, linenumEl, linecodeEl;
 
     let top, left;
@@ -265,5 +267,19 @@ Caret.prototype = {
       let line_ref = _this.page.getLineRef(line_num);
       _this.setPos(line_num, line_ref.getCharCount()+1);
     }
+  },
+
+  getCarretElement: function() {
+    return $(`#caret_${this.page.getId()}_${this.id}`);
+  },
+
+  resetBlink: function() {
+    let carret = this.getCarretElement();
+    carret.removeClass("blink-caret");
+
+    // Timeout avoids continuation of blink animation
+    window.setTimeout(() => {
+      carret.addClass("blink-caret");
+    }, 500);;
   }
 }

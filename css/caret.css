@@ -7,3 +7,12 @@
   transition: 0.07s;
   z-index: 3;
 }
+
+.blink-caret {
+  animation: blink 1s 1s infinite;
+}
+
+@keyframes blink{
+  0%{opacity: 0;}
+  50%{opacity: 100%;}
+}
