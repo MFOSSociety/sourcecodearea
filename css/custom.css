@@ -1,6 +1,7 @@
 #code_editor {
   background-color: rgb(39, 39, 39);
   overflow-y: auto;
+  cursor: text;
   /* overflow-x: hidden; */
 }
 .caret {
